@@ -3,6 +3,8 @@ import data from "./data.json" assert {type: "json"}
 const dashboard = document.querySelector(".dashboard")
 const template = document.querySelector("#template").content
 
+const timeframeButtons = document.querySelector(".dashboard__profile__bottom").querySelectorAll("li")
+
 const IMG_MAP = {
     Play: {
         src: "./images/icon-play.svg",
@@ -30,9 +32,35 @@ const IMG_MAP = {
     },
 }
 
+
+
 data.forEach(dat => {
     dashboard.appendChild(renderTemplate(dat))
 })
+
+timeframeButtons.forEach(button => {
+    button.addEventListener("click", (e) => {
+        renderTimeframe(e.target)
+    })
+})
+
+function renderTimeframe(element) {
+    const timeFrame = element.dataset.time 
+    timeframeButtons.forEach(button => {
+        button.classList.remove("active")
+    })
+    element.classList.add("active")
+    const activityArticles = document.querySelectorAll(".dashboard__activity")
+    activityArticles.forEach(article => {
+        const articleTimeframes = article.querySelectorAll(".info-bottom > div")
+        articleTimeframes.forEach(time => {
+            time.classList.remove("active")
+            if (time.dataset.time === timeFrame) {
+                time.classList.add("active")
+            }
+        })
+    })
+}
 
 function renderTemplate(data) {
     const activityTemplate = template.cloneNode(true) 
